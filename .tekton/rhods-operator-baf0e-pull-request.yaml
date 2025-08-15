@@ -336,6 +336,28 @@ spec:
         operator: in
         values:
         - "false"
+    - name: supported-resources-operator-bundle-check
+      params:
+      - name: IMAGE_URL
+        value: $(tasks.build-image-index.results.IMAGE_URL)
+      - name: IMAGE_DIGEST
+        value: $(tasks.build-image-index.results.IMAGE_DIGEST)
+      runAfter:
+      - build-image-index
+      taskRef:
+        params:
+        - name: url
+          value: https://github.com/asergienk/build-definitions.git
+        - name: revision
+          value: add_supported_resources_check
+        - name: pathInRepo
+          value: task/supported-resources-operator-bundle-check/0.1/supported-resources-operator-bundle-check.yaml
+        resolver: git
+      when:
+      - input: $(params.skip-checks)
+        operator: in
+        values:
+        - "false"
     - name: clair-scan
       params:
       - name: image-digest
